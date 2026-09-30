@@ -1,9 +1,10 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
-import { ArrowDown, ArrowLeft, ArrowUpRight, Bell, Bot, Check, ChevronDown, CircleHelp, CreditCard, FolderKanban, Home as HomeIcon, Languages, Layers, LayoutDashboard, LockKeyhole, LogOut, MapPin, MessageCircle, Palette, Phone, Plug, Search, Send, Settings2, Sparkles, Users, Wallet } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowUpRight, Bell, Bot, Check, ChevronDown, CircleHelp, CreditCard, FolderKanban, Home as HomeIcon, Languages, Layers, LayoutDashboard, LockKeyhole, LogOut, MapPin, MessageCircle, Palette, Phone, Plug, Search, Send, Settings2, Sparkles, Users, Wallet, X } from "lucide-react";
 import { InteractiveGlobe } from "@/components/interactive-globe";
 import { InteractiveLines } from "@/components/interactive-lines";
+import { WhatsAppCampaigns } from "@/components/whatsapp-campaigns";
 
 type ThemeName = "orange" | "blue" | "pink" | "white";
 type Language = "Português" | "English" | "Español";
@@ -180,6 +181,7 @@ export default function Home() {
   if (screen === "welcome") return <WelcomeRefined openAuth={openAuth} />;
   if (screen === "auth") return <AuthGatewayVerified mode={authMode} onBack={() => setScreen("welcome")} onDone={name => { setUserName(name); setTransitioning(true); window.setTimeout(() => { setScreen("app"); setView("overview"); setTransitioning(false); }, 850); }} />;
   const accent = themes[theme];
-  const page = view === "search" ? <LeadSearch accent={accent} /> : view === "saved" ? <SavedLeads /> : view === "numbers" ? <NumberLeads /> : view === "assistant" ? <AssistantVX accent={accent} userName={userName} /> : view === "finance" ? <FinancialDashboard /> : view === "plans" ? <Plans /> : view === "settings" ? <Settings theme={theme} setTheme={setTheme} language={language} setLanguage={setLanguage} /> : view === "integrations" ? <Integrations /> : view === "support" ? <Support /> : view in workData ? <WorkPage kind={view as keyof typeof workData} /> : <OverviewReference userName={userName} />;
+  const page = view === "search" ? <LeadSearch accent={accent} /> : view === "saved" ? <SavedLeads /> : view === "numbers" ? <NumberLeads /> : view === "messages" ? <WhatsAppCampaigns /> : view === "assistant" ? <AssistantVX accent={accent} userName={userName} /> : view === "finance" ? <FinancialDashboard /> : view === "plans" ? <Plans /> : view === "settings" ? <Settings theme={theme} setTheme={setTheme} language={language} setLanguage={setLanguage} /> : view === "integrations" ? <Integrations /> : view === "support" ? <Support /> : view in workData ? <WorkPage kind={view as keyof typeof workData} /> : <OverviewReference userName={userName} />;
   return <main className="app-shell ref-style" style={{ "--accent": accent } as React.CSSProperties}><Sidebar view={view} setView={setView} userName={userName} logout={() => { localStorage.removeItem("vxleads_session"); setScreen("app"); }} /><section className="main-area"><Topbar view={view} language={language} accent={accent} />{page}</section></main>;
 }
+
