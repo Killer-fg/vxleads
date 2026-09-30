@@ -50,6 +50,9 @@ export default defineConfig(async () => {
   // Wrangler snapshots its log path while the Cloudflare plugin is imported.
   const localOnlyDev = process.env.VXLEADS_LOCAL_ONLY !== "0";
   const { cloudflare } = localOnlyDev ? { cloudflare: null } : await import("@cloudflare/vite-plugin");
+  const nitroPlugin = process.env.VERCEL
+    ? (await import("nitro/vite")).nitro
+    : null;
 
   return {
     server: {
@@ -62,6 +65,7 @@ export default defineConfig(async () => {
     plugins: [
       vinext(),
       sites({ mockAuth: !managedLinux }),
+      ...(nitroPlugin ? [nitroPlugin()] : []),
       ...(cloudflare ? [cloudflare({
         viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
         inspectorPort: false,
@@ -70,3 +74,4 @@ export default defineConfig(async () => {
     ],
   };
 });
+
